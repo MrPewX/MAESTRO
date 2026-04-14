@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MAESTRO | Control Center Final</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="main.js"></script>
+    <script>
+        const role = localStorage.getItem('userRole');
+        const roleLabel = localStorage.getItem('roleLabel');
+        const isLoggedIn = localStorage.getItem('isLoggedIn');
+        if (!isLoggedIn || role === 'asesi') window.location.href = 'login.html';
+    </script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body { background-color: #f1f5f9; }
+        .dashboard-layout { display: grid; grid-template-columns: 280px 1fr; min-height: 100vh; }
+        .sidebar { background: #1e293b; color: white; padding: 32px 20px; position: sticky; top: 0; height: 100vh; overflow-y: auto; }
+        .sidebar-menu { list-style: none; display: flex; flex-direction: column; gap: 4px; margin-top: 30px; }
+        .sidebar-menu li a { color: #94a3b8; text-decoration: none; display: flex; align-items: center; gap: 12px; padding: 12px; border-radius: var(--radius-md); cursor: pointer; transition: 0.3s; font-size: 14px; }
+        .sidebar-menu li a:hover { color: white; background: rgba(255,255,255,0.05); }
+        .sidebar-menu li a.active { background: var(--primary); color: white; }
+        .main-content { padding: 40px; }
+        .widget { background: white; padding: 24px; border-radius: var(--radius-lg); border: 1px solid var(--border); margin-bottom: 24px; box-shadow: var(--shadow-sm); }
+        table { width: 100%; border-collapse: collapse; margin-top: 15px; }
+        th { text-align: left; background: #f8fafc; padding: 12px; font-size: 11px; text-transform: uppercase; color: #64748b; }
+        td { padding: 14px 12px; border-bottom: 1px solid #f1f5f9; font-size: 13px; }
+        .badge { padding: 3px 8px; border-radius: 99px; font-size: 10px; font-weight: bold; }
+        .grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; }
+    </style>
+</head>
+<body>
+    <div class="dashboard-layout">
+        <aside class="sidebar">
+            <div class="logo">Maestro<span>.</span></div>
+            <div style="margin-top: 20px; padding: 15px; background: rgba(255,255,255,0.05); border-radius: 12px;">
+                <small style="color: #94a3b8; font-weight: bold;">STAFF PORTAL</small>
+                <div style="font-weight: bold; color: #fff;" id="sidebar-role-name">Memuat...</div>
+            </div>
+            <ul class="sidebar-menu" id="dynamic-menu"></ul>
+        </aside>
+
+        <main class="main-content">
+            <header style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;">
+                <h1 id="view-title">Dashboard</h1>
+                <button class="btn btn-outline" onclick="logout()">Keluar</button>
+            </header>
+            <div id="content-area"></div>
+        </main>
+    </div>
+
+    <script>
+        const roleMenus = {
+            direktur: [
+                { id: 'dir_sum', label: 'Executive Summary', icon: 'bar-chart-2' },
+                { id: 'dir_part', label: 'Partnership Tracking', icon: 'handshake' },
+                { id: 'dir_market', label: 'Analisis Pasar', icon: 'trending-up' },
+                { id: 'dir_legal', label: 'Legal Compliance', icon: 'shield' }
+            ],
+            sertifikasi: [
+                { id: 'cert_queue', label: 'Queue Verifikasi', icon: 'clipboard-list' },
+                { id: 'cert_cal', label: 'Master Jadwal', icon: 'calendar' },
+                { id: 'cert_alloc', label: 'Alokasi LSP', icon: 'share-2' },
+                { id: 'cert_res', label: 'Laporan Hasil', icon: 'pie-chart' }
+            ],
+            mutu: [
+                { id: 'mutu_sop', label: 'SOP Compliance', icon: 'check-square' },
+                { id: 'mutu_muk', label: 'Validasi Perangkat', icon: 'file-check' },
+                { id: 'mutu_feed', label: 'Feedback & Complaint', icon: 'message-square' },
+                { id: 'mutu_audit', label: 'Audit Trail', icon: 'history' }
+            ],
+            keuangan: [
+                { id: 'fin_rev', label: 'Revenue Tracker', icon: 'dollar-sign' },
+                { id: 'fin_log', label: 'Logistik Sertifikat', icon: 'truck' },
+                { id: 'fin_pay', label: 'Payroll & Honor', icon: 'users' },
+                { id: 'fin_db', label: 'Database Asesi', icon: 'database' }
+            ],
+            it: [
+                { id: 'it_ana', label: 'Web Analytics', icon: 'activity' },
+                { id: 'it_health', label: 'System Health', icon: 'server' },
+                { id: 'it_mark', label: 'Marketing Automation', icon: 'mail' },
+                { id: 'it_api', label: 'Integrasi API', icon: 'cpu' }
+            ]
+        };
+
+        async function init() {
+            document.getElementById('sidebar-role-name').innerText = roleLabel;
+            renderMenu();
+            switchView(roleMenus[role][0].id);
+        }
+
+        function renderMenu() {
+            document.getElementById('dynamic-menu').innerHTML = roleMenus[role].map(item => `
+                <li><a onclick="switchView('${item.id}')" id="menu-${item.id}"><i data-lucide="${item.icon}"></i> ${item.label}</a></li>
+            `).join('');
+            lucide.createIcons();
+        }
+
+        function switchView(viewId) {
+            document.querySelectorAll('.sidebar-menu a').forEach(a => a.classList.remove('active'));
+            document.getElementById(`menu-${viewId}`).classList.add('active');
+            document.getElementById('view-title').innerText = roleMenus[role].find(v => v.id === viewId).label;
+            document.getElementById('content-area').innerHTML = renderUI(viewId);
+            lucide.createIcons();
+        }
+
+        function renderUI(id) {
+            switch(id) {
+                // Direktur
+                case 'dir_sum': return `<div class="grid-3"><div class="widget"><h4>Revenue</h4><h2>Rp 0</h2></div><div class="widget"><h4>Asesi Aktif</h4><h2>0</h2></div></div><div class="widget"><canvas id="c1"></canvas></div>`;
+                case 'dir_part': return `<div class="widget"><h3>Mitra LSP Terdaftar</h3><table><tr><th>Nama Mitra</th><th>Transaksi</th><th>Status</th></tr><tr><td colspan="3" class="text-muted">Menunggu data Google Sheets...</td></tr></table></div>`;
+                case 'dir_market': return `<div class="widget"><h3>Tren Skema Populer</h3><div class="text-muted">Data pasar ditarik dari analitik pendaftaran.</div></div>`;
+                case 'dir_legal': return `<div class="widget"><h3>Legalitas & Masa Berlaku</h3><div class="text-muted">Monitoring lisensi BNSP & Mitra.</div></div>`;
+                
+                // Sertifikasi
+                case 'cert_queue': return `<div class="widget"><h3>Queue Verifikasi APL-01 & APL-02</h3><table><tr><th>Asesi</th><th>Dokumen</th><th>Status</th><th>Aksi</th></tr><tr><td colspan="4" class="text-muted">Tidak ada antrean baru.</td></tr></table></div>`;
+                case 'cert_cal': return `<div class="widget"><h3>Master Jadwal Asesmen</h3><div class="text-muted">Sinkronisasi Asesor & Peserta.</div></div>`;
+                case 'cert_alloc': return `<div class="widget"><h3>Alokasi Pengiriman LSP</h3><div class="text-muted">Distribusi Asesi ke Mitra LSP A/B/C.</div></div>`;
+                case 'cert_res': return `<div class="widget"><h3>Rekapitulasi K vs BK</h3><div class="text-muted">Laporan kelulusan batch aktif.</div></div>`;
+
+                // Mutu
+                case 'mutu_sop': return `<div class="widget"><h3>Compliance Checklist (BNSP SOP)</h3><div class="text-muted">Verifikasi kepatuhan regulasi digital.</div></div>`;
+                case 'mutu_muk': return `<div class="widget"><h3>Validasi Perangkat (MUK)</h3><div class="text-muted">Tinjauan Materi Uji Kompetensi mitra.</div></div>`;
+                case 'mutu_feed': return `<div class="widget"><h3>Feedback & Complaints</h3><div class="text-muted">Kotak masuk keluhan layanan asesi.</div></div>`;
+                case 'mutu_audit': return `<div class="widget"><h3>Audit Trail</h3><div class="text-muted">Log persetujuan dokumen sistem.</div></div>`;
+
+                // Keuangan
+                case 'fin_rev': return `<div class="widget"><h3>Revenue & Invoicing</h3><div class="text-muted">Monitoring tagihan perusahaan mitra.</div></div>`;
+                case 'fin_log': return `<div class="widget"><h3>Logistik & Blanko</h3><div class="text-muted">Stok blanko & status kurir pengiriman.</div></div>`;
+                case 'fin_pay': return `<div class="widget"><h3>Payroll & Honor</h3><div class="text-muted">Manajemen komisi tim & honor asesor.</div></div>`;
+                case 'fin_db': return `<div class="widget"><h3>Database Contact Asesi</h3><div class="text-muted">Data pengiriman dokumen fisik.</div></div>`;
+
+                // IT
+                case 'it_ana': return `<div class="widget"><h3>Web Analytics</h3><div class="text-muted">Daily visitors & Conversion rate.</div></div>`;
+                case 'it_health': return `<div class="widget"><h3>System Health</h3><div class="text-muted">Status server & Keamanan database.</div></div>`;
+                case 'it_mark': return `<div class="widget"><h3>Marketing Automation</h3><div class="text-muted">Content promo & Chatbot bantuan.</div></div>`;
+                case 'it_api': return `<div class="widget"><h3>Integrasi API Monitor</h3><div class="text-muted">Monitor koneksi sistem MAESTRO-LSP.</div></div>`;
+
+                default: return `<div class="widget">Halaman ini telah dikonfigurasi.</div>`;
+            }
+        }
+
+        init();
+    </script>
+</body>
+</html>

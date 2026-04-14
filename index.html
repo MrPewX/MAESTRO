@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MAESTRO | Agregator Sertifikasi Profesi Terpadu</title>
+    <meta name="description" content="MAESTRO adalah platform agregator LSP terpadu yang menghubungkan profesional dengan lembaga sertifikasi terpercaya di Indonesia.">
+    <link rel="stylesheet" href="style.css">
+    <!-- Lucide Icons for premium feel -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body>
+    <nav class="glass">
+        <div class="container nav-content">
+            <div class="logo">Maestro<span>.</span></div>
+            <div class="nav-links">
+                <a href="index.html">Beranda</a>
+                <a href="#layanan">Layanan</a>
+                <a href="directory.html">Direktori LSP</a>
+                <a href="#tentang">Tentang Kami</a>
+            </div>
+            <div class="nav-actions">
+                <a href="login.html" class="btn btn-outline">Masuk</a>
+                <a href="login.html" class="btn btn-primary">Daftar Sekarang</a>
+            </div>
+        </div>
+    </nav>
+
+    <header id="home" class="hero container">
+        <div class="animate-fade-in">
+            <span class="hero-tag">Platform Agregator Terbesar di Indonesia</span>
+            <h1>Satu Platform Untuk<br>Semua Sertifiaksi Profesi</h1>
+            <p>Terhubung dengan puluhan Lembaga Sertifikasi Profesi (LSP) mitra. Cerdas, objektif, dan terpercaya untuk langkah karir masa depan Anda.</p>
+            
+            <div class="search-box">
+                <input type="text" id="main-search" placeholder="Cari profesi (contoh: Project Manager, IT, Konstruksi)...">
+                <button class="btn btn-primary" onclick="searchCertification()">
+                    <i data-lucide="search"></i>
+                    Cari Sertifikasi
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <section class="stats container">
+        <div class="stats-grid">
+            <div class="stat-item text-center">
+                <h3 id="stat-lsp">50+</h3>
+                <p>Mitra LSP Aktif</p>
+            </div>
+            <div class="stat-item text-center">
+                <h3 id="stat-asesi">10,000+</h3>
+                <p>Asesi Terverifikasi</p>
+            </div>
+            <div class="stat-item text-center">
+                <h3 id="stat-skema">200+</h3>
+                <p>Skema Sertifikasi</p>
+            </div>
+            <div class="stat-item text-center">
+                <h3>24/7</h3>
+                <p>Dukungan Online</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="layanan" class="container" style="padding: 100px 0;">
+        <div class="section-header">
+            <h2>Layanan Unggulan Maestro</h2>
+            <p>Kami mempermudah proses sertifikasi Anda dari awal hingga akhir.</p>
+        </div>
+        
+        <div class="card-grid">
+            <div class="card">
+                <div class="card-icon"><i data-lucide="search"></i></div>
+                <h3>Pencarian Cerdas</h3>
+                <p>Temukan LSP dan skema sertifikasi yang tepat berdasarkan lokasi, harga, dan rating objektif.</p>
+            </div>
+            <div class="card">
+                <div class="card-icon"><i data-lucide="file-check"></i></div>
+                <h3>Pendaftaran Terpadu</h3>
+                <p>Cukup isi data satu kali untuk mendaftar ke berbagai LSP berbeda melalui dashboard Maestro.</p>
+            </div>
+            <div class="card">
+                <div class="card-icon"><i data-lucide="credit-card"></i></div>
+                <h3>Pembayaran Otomatis</h3>
+                <p>Sistem pembayaran terintegrasi yang aman dan otomatis memverifikasi transaksi Anda.</p>
+            </div>
+            <div class="card">
+                <div class="card-icon"><i data-lucide="bell"></i></div>
+                <h3>Notifikasi Real-time</h3>
+                <p>Dapatkan update status pendaftaran dan jadwal ujian langsung melalui WhatsApp & Email.</p>
+            </div>
+            <div class="card">
+                <div class="card-icon"><i data-lucide="award"></i></div>
+                <h3>E-Certificate Vault</h3>
+                <p>Simpan dan akses sertifikat digital Anda kapan saja di satu tempat yang aman.</p>
+            </div>
+            <div class="card">
+                <div class="card-icon"><i data-lucide="users"></i></div>
+                <h3>Dukungan Mitra</h3>
+                <p>Alat manajerial untuk LSP untuk mengelola asesi dengan lebih efisien dan transparan.</p>
+            </div>
+        </div>
+    </section>
+
+    <footer style="background: white; border-top: 1px solid var(--border); padding: 80px 0 40px;">
+        <div class="container">
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 48px; margin-bottom: 60px;">
+                <div>
+                    <div class="logo" style="margin-bottom: 24px;">Maestro<span>.</span></div>
+                    <p style="color: var(--text-muted);">Pusat Agregator Sertifikasi Profesi yang membantu profesional Indonesia naik kelas melalui sertifikasi berkualitas.</p>
+                </div>
+                <div>
+                    <h4 style="margin-bottom: 24px;">Navigasi</h4>
+                    <ul style="list-style: none; color: var(--text-muted); line-height: 2;">
+                        <li><a href="directory.html" style="text-decoration: none; color: inherit;">Cari Sertifikasi</a></li>
+                        <li><a href="directory.html" style="text-decoration: none; color: inherit;">Mitra LSP</a></li>
+                        <li><a href="#" style="text-decoration: none; color: inherit;">Blog & Berita</a></li>
+                        <li><a href="#" style="text-decoration: none; color: inherit;">Bantuan</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 style="margin-bottom: 24px;">Kontak</h4>
+                    <p style="color: var(--text-muted); line-height: 1.8;">
+                        Gedung Maestro Lt. 5<br>
+                        Jl. Sudirman No. 123, Jakarta<br>
+                        support@maestro.id<br>
+                        +62 812-3456-7890
+                    </p>
+                </div>
+            </div>
+            <div style="border-top: 1px solid var(--border); padding-top: 40px; text-align: center; color: var(--text-muted); font-size: 14px;">
+                &copy; 2026 Maestro Aggregator. All rights reserved.
+            </div>
+        </div>
+    </footer>
+
+    <script src="main.js"></script>
+    <script>
+        // Initialize Lucide Icons
+        lucide.createIcons();
+    </script>
+</body>
+</html>

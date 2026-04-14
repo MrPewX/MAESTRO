@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Direktori Sertifikasi | MAESTRO</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        .directory-container {
+            padding: 40px 0 100px;
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            gap: 40px;
+        }
+
+        .filters {
+            background: white;
+            padding: 24px;
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--border);
+            height: fit-content;
+            position: sticky;
+            top: 100px;
+        }
+
+        .filter-group {
+            margin-bottom: 24px;
+        }
+
+        .filter-group h4 {
+            margin-bottom: 12px;
+            font-size: 16px;
+        }
+
+        .filter-option {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 8px;
+            color: var(--text-muted);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .filter-option:hover {
+            color: var(--primary);
+        }
+
+        .item-list {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .prof-card {
+            background: white;
+            padding: 24px;
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: var(--transition);
+        }
+
+        .prof-card:hover {
+            border-color: var(--primary-light);
+            box-shadow: var(--shadow-md);
+        }
+
+        .prof-info h3 {
+            margin-bottom: 4px;
+        }
+
+        .prof-tags {
+            display: flex;
+            gap: 8px;
+            margin-top: 12px;
+        }
+
+        .tag {
+            padding: 4px 12px;
+            background: var(--background);
+            border-radius: var(--radius-full);
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        .price-tag {
+            text-align: right;
+        }
+
+        .price {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--primary);
+            display: block;
+        }
+
+        @media (max-width: 768px) {
+            .directory-container {
+                grid-template-columns: 1fr;
+            }
+            .filters {
+                position: static;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="glass">
+        <div class="container nav-content">
+            <a href="index.html" class="logo">Maestro<span>.</span></a>
+            <div class="nav-links">
+                <a href="index.html">Beranda</a>
+                <a href="directory.html" style="color: var(--primary);">Direktori LSP</a>
+                <a href="dashboard.html">Dashboard</a>
+            </div>
+            <div class="nav-actions">
+                <a href="login.html" class="btn btn-primary">Portal Pengguna</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <header style="padding: 60px 0 20px;">
+            <h1>Katalog Sertifikasi Profesi</h1>
+            <p style="color: var(--text-muted);">Temukan skema sertifikasi dari berbagai mitra LSP resmi BNSP.</p>
+        </header>
+
+        <div class="directory-container">
+            <aside class="filters">
+                <div class="filter-group">
+                    <h4>Kategori Industri</h4>
+                    <div class="filter-option"><input type="checkbox"> Teknologi Informasi</div>
+                    <div class="filter-option"><input type="checkbox"> Manajemen & Bisnis</div>
+                    <div class="filter-option"><input type="checkbox"> Konstruksi</div>
+                    <div class="filter-option"><input type="checkbox"> Kesehatan</div>
+                </div>
+
+                <div class="filter-group">
+                    <h4>Metode Ujian</h4>
+                    <div class="filter-option"><input type="checkbox"> Online (Remote)</div>
+                    <div class="filter-option"><input type="checkbox"> Offline (TUK)</div>
+                </div>
+
+                <div class="filter-group">
+                    <h4>Rentang Harga</h4>
+                    <input type="range" style="width: 100%;">
+                </div>
+
+                <button class="btn btn-primary" style="width: 100%;" onclick="alert('Filter diterapkan!')">Terapkan Filter</button>
+            </aside>
+
+            <main class="item-list">
+                <!-- Example Profession Card -->
+                <div class="prof-card">
+                    <div class="prof-info">
+                        <h3>Project Manager Madya</h3>
+                        <p style="color: var(--text-muted); font-size: 14px;">LSP Manajemen Perkantoran Modern</p>
+                        <div class="prof-tags">
+                            <span class="tag">Manajemen</span>
+                            <span class="tag">Offline</span>
+                            <span class="tag">BNSP</span>
+                        </div>
+                    </div>
+                    <div class="price-tag">
+                        <span class="price">Rp 2.500.000</span>
+                        <a href="#" class="btn btn-outline" style="margin-top: 12px; padding: 8px 16px;">Detail & Daftar</a>
+                    </div>
+                </div>
+
+                <div class="prof-card">
+                    <div class="prof-info">
+                        <h3>Junior Web Developer</h3>
+                        <p style="color: var(--text-muted); font-size: 14px;">LSP Teknologi Informasi Indonesia</p>
+                        <div class="prof-tags">
+                            <span class="tag">IT</span>
+                            <span class="tag">Online</span>
+                            <span class="tag">BNSP</span>
+                        </div>
+                    </div>
+                    <div class="price-tag">
+                        <span class="price">Rp 1.200.000</span>
+                        <a href="#" class="btn btn-outline" style="margin-top: 12px; padding: 8px 16px;">Detail & Daftar</a>
+                    </div>
+                </div>
+
+                <div class="prof-card">
+                    <div class="prof-info">
+                        <h3>Ahli K3 Konstruksi</h3>
+                        <p style="color: var(--text-muted); font-size: 14px;">LSP Konstruksi Nusantara</p>
+                        <div class="prof-tags">
+                            <span class="tag">Konstruksi</span>
+                            <span class="tag">Offline</span>
+                            <span class="tag">BNSP</span>
+                        </div>
+                    </div>
+                    <div class="price-tag">
+                        <span class="price">Rp 3.750.000</span>
+                        <a href="#" class="btn btn-outline" style="margin-top: 12px; padding: 8px 16px;">Detail & Daftar</a>
+                    </div>
+                </div>
+
+                <div class="prof-card">
+                    <div class="prof-info">
+                        <h3>Digital Marketer Specialist</h3>
+                        <p style="color: var(--text-muted); font-size: 14px;">LSP Pemasaran Kreatif</p>
+                        <div class="prof-tags">
+                            <span class="tag">Marketing</span>
+                            <span class="tag">Online</span>
+                            <span class="tag">BNSP</span>
+                        </div>
+                    </div>
+                    <div class="price-tag">
+                        <span class="price">Rp 1.500.000</span>
+                        <a href="#" class="btn btn-outline" style="margin-top: 12px; padding: 8px 16px;">Detail & Daftar</a>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <script>
+        lucide.createIcons();
+    </script>
+</body>
+</html>

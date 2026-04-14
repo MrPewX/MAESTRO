@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Asesi Dashboard | MAESTRO</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="main.js"></script>
+    <script>
+        if (!localStorage.getItem('isLoggedIn') || localStorage.getItem('userRole') !== 'asesi') {
+            window.location.href = 'login.html';
+        } else {
+            pushLog('Dashboard Access', 'Asesi masuk ke dashboard pribadi');
+        }
+    </script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        body { background-color: #f1f5f9; }
+        .dashboard-layout { display: grid; grid-template-columns: 260px 1fr; min-height: 100vh; }
+        .sidebar { background: #0f172a; color: white; padding: 32px 20px; position: sticky; top: 0; height: 100vh; }
+        .sidebar-menu { list-style: none; display: flex; flex-direction: column; gap: 8px; margin-top: 40px; }
+        .sidebar-menu li a { color: #94a3b8; text-decoration: none; display: flex; align-items: center; gap: 12px; padding: 12px; border-radius: var(--radius-md); cursor: pointer; transition: 0.3s; }
+        .sidebar-menu li a.active { background: var(--primary); color: white; }
+        .main-content { padding: 40px; }
+        .content-section { display: none; }
+        .content-section.active { display: block; }
+        .progress-container { display: flex; justify-content: space-between; margin: 40px 0; position: relative; }
+        .progress-step { text-align: center; z-index: 2; position: relative; flex: 1; }
+        .progress-dot { width: 32px; height: 32px; background: #cbd5e1; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 10px; color: white; font-weight: bold; }
+        .progress-step.completed .progress-dot { background: #166534; }
+        .progress-step.current .progress-dot { background: var(--primary); box-shadow: 0 0 0 4px rgba(37,99,235,0.2); }
+        .progress-line { position: absolute; top: 16px; left: 10%; right: 10%; height: 2px; background: #cbd5e1; z-index: 1; }
+        .widget { background: white; padding: 24px; border-radius: var(--radius-lg); border: 1px solid var(--border); margin-bottom: 24px; box-shadow: var(--shadow-sm); }
+        .vault-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; }
+        .vault-item { border: 1px solid var(--border); padding: 15px; border-radius: var(--radius-md); text-align: center; cursor: pointer; transition: 0.2s; }
+        .vault-item:hover { border-color: var(--primary); background: rgba(37,99,235,0.05); }
+    </style>
+</head>
+<body>
+    <div class="dashboard-layout">
+        <aside class="sidebar">
+            <div class="logo">Maestro<span>.</span></div>
+            <ul class="sidebar-menu">
+                <li><a onclick="showSection('status')" class="active" id="nav-status"><i data-lucide="activity"></i> Status Sertifikasi</a></li>
+                <li><a onclick="showSection('wallet')" id="nav-wallet"><i data-lucide="credit-card"></i> E-Wallet & Invoice</a></li>
+                <li><a onclick="showSection('vault')" id="nav-vault"><i data-lucide="database"></i> Document Vault</a></li>
+                <li><a onclick="showSection('jadwal')" id="nav-jadwal"><i data-lucide="map-pin"></i> Jadwal & Lokasi</a></li>
+                <li><a onclick="showSection('sertifikat')" id="nav-sertifikat"><i data-lucide="award"></i> Sertifikat Digital</a></li>
+                <li style="margin-top: 40px;"><a onclick="logout()"><i data-lucide="log-out"></i> Keluar</a></li>
+            </ul>
+        </aside>
+
+        <main class="main-content">
+            <!-- 1. Halaman Status -->
+            <section id="section-status" class="content-section active">
+                <h1>Progress Sertifikasi Saya</h1>
+                <p class="text-muted">Halo Budi, berikut adalah status sertifikasi Junior Web Developer Anda.</p>
+                
+                <div class="progress-container">
+                    <div class="progress-line"></div>
+                    <div class="progress-step completed">
+                        <div class="progress-dot">✓</div>
+                        <p style="font-size: 12px; margin-top: 10px;">Pendaftaran</p>
+                    </div>
+                    <div class="progress-step current">
+                        <div class="progress-dot">2</div>
+                        <p style="font-size: 12px; margin-top: 10px;">Verifikasi Berkas</p>
+                    </div>
+                    <div class="progress-step">
+                        <div class="progress-dot">3</div>
+                        <p style="font-size: 12px; margin-top: 10px;">Jadwal Ujian</p>
+                    </div>
+                    <div class="progress-step">
+                        <div class="progress-dot">4</div>
+                        <p style="font-size: 12px; margin-top: 10px;">Hasil Pleno</p>
+                    </div>
+                    <div class="progress-step">
+                        <div class="progress-dot">5</div>
+                        <p style="font-size: 12px; margin-top: 10px;">Sertifikat Terbit</p>
+                    </div>
+                </div>
+
+                <div class="widget">
+                    <h3>Catatan Admin</h3>
+                    <p style="color: var(--text-muted); margin-top: 10px;">Dokumen Anda sedang ditinjau oleh <strong>Manajer Sertifikasi</strong>. Pantau Vault Anda jika ada permintaan revisi berkas.</p>
+                </div>
+            </section>
+
+            <!-- 2. E-Wallet -->
+            <section id="section-wallet" class="content-section">
+                <h1>E-Wallet & Transaksi</h1>
+                <div style="display: grid; grid-template-columns: 1fr 1.5fr; gap: 24px; margin-top: 30px;">
+                    <div class="widget">
+                        <p class="text-muted">Sisa Tagihan</p>
+                        <h2 style="color: red; font-size: 32px;">Rp 1.500.000</h2>
+                        <button class="btn btn-primary" style="width: 100%; margin-top: 20px;">Bayar Sekarang</button>
+                    </div>
+                    <div class="widget">
+                        <h3>Riwayat Transaksi</h3>
+                        <table style="width: 100%; margin-top: 15px;">
+                            <tr style="border-bottom: 1px solid #eee;">
+                                <td style="padding: 10px 0;">Pendaftaran Awal</td>
+                                <td style="text-align: right;">Rp 500.000</td>
+                                <td style="text-align: right; color: green;">Lunas</td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 3. Document Vault -->
+            <section id="section-vault" class="content-section">
+                <h1>Document Vault</h1>
+                <p class="text-muted">Single Source of Truth: Dokumen yang Anda unggah otomatis terlihat oleh Manajer Sertifikasi.</p>
+                <div class="vault-grid" style="margin-top: 30px;">
+                    <div class="vault-item">
+                        <i data-lucide="file-text" style="color: var(--primary);"></i>
+                        <p style="margin-top: 10px;">KTP / Paspor</p>
+                        <small style="color: green;">✓ Terunggah</small>
+                    </div>
+                    <div class="vault-item">
+                        <i data-lucide="file-text" style="color: var(--primary);"></i>
+                        <p style="margin-top: 10px;">CV Terbaru</p>
+                        <small style="color: green;">✓ Terunggah</small>
+                    </div>
+                    <div class="vault-item">
+                        <i data-lucide="file-plus" style="color: #ccc;"></i>
+                        <p style="margin-top: 10px;">Ijazah Terakhir</p>
+                        <small style="color: red;">! Belum Ada</small>
+                    </div>
+                    <div class="vault-item">
+                        <i data-lucide="file-plus" style="color: #ccc;"></i>
+                        <p style="margin-top: 10px;">Surat Pengalaman</p>
+                        <small style="color: red;">! Belum Ada</small>
+                    </div>
+                </div>
+                <div class="widget" style="margin-top: 30px; text-align: center; border: 2px dashed #cbd5e1;">
+                    <i data-lucide="upload-cloud" style="width: 40px; height: 40px; margin-bottom: 10px;"></i>
+                    <p>Seret file baru ke sini untuk melengkapi APL-01</p>
+                </div>
+            </section>
+
+            <!-- 4. Jadwal -->
+            <section id="section-jadwal" class="content-section">
+                <h1>Jadwal & Lokasi Ujian</h1>
+                <div class="widget" style="margin-top: 30px;">
+                    <div style="display: flex; gap: 20px; align-items: flex-start;">
+                        <div style="background: var(--primary); color: white; padding: 15px; border-radius: 12px; text-align: center; min-width: 80px;">
+                            <div style="font-size: 14px;">MEI</div>
+                            <div style="font-size: 24px; font-weight: bold;">12</div>
+                        </div>
+                        <div>
+                            <h3>Ujian Kompetensi Web Developer</h3>
+                            <p class="text-muted"><i data-lucide="clock" style="width: 14px;"></i> 09:00 - 15:00 WIB</p>
+                            <p class="text-muted"><i data-lucide="map-pin" style="width: 14px;"></i> TUK Jakarta Selatan (Offline)</p>
+                            <button class="btn btn-outline" style="margin-top: 15px;">Lihat Peta Lokasi</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 5. Sertifikat -->
+            <section id="section-sertifikat" class="content-section">
+                <h1>Sertifikat Digital</h1>
+                <div class="widget" style="margin-top: 30px; text-align: center; padding: 60px;">
+                    <i data-lucide="lock" style="width: 48px; height: 48px; color: #ccc; margin-bottom: 20px;"></i>
+                    <h3>Belum Tersedia</h3>
+                    <p class="text-muted">Sertifikat akan muncul di sini setelah Anda dinyatakan KOMPETEN dan pleno selesai.</p>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script>
+        function showSection(sectionId) {
+            document.querySelectorAll('.content-section').forEach(s => s.classList.remove('active'));
+            document.querySelectorAll('.sidebar-menu a').forEach(a => a.classList.remove('active'));
+            
+            document.getElementById('section-' + sectionId).classList.add('active');
+            document.getElementById('nav-' + sectionId).classList.add('active');
+            lucide.createIcons();
+        }
+
+        function logout() {
+            localStorage.clear();
+            window.location.href = 'login.html';
+        }
+
+        lucide.createIcons();
+    </script>
+</body>
+</html>
