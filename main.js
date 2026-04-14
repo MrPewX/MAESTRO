@@ -1,12 +1,12 @@
 // MAESTRO GLOBAL API CONFIGURATION
-const API_URL = 'https://script.google.com/macros/s/AKfycbyLHwjBUAWRxO_eu8CIYy1gVJT791vZ9H6BhNlRckJBpn3FKc79zr1RndHr7CFHq7HrMw/exec';
+const API_URL = 'https://script.google.com/macros/s/AKfycbz064mnnDQk44jyE7Kj9RZg6fVkJHQP4ng36IUM9a38Mk44Fiz088HSRxFIkLXGqk3TfA/exec';
 
-// FUNGSI DAFTAR (Paling stabil untuk GAS)
+// FUNGSI DAFTAR (POST ke Google Sheets)
 async function registerToDB(userData) {
     try {
         await fetch(API_URL, {
             method: 'POST',
-            mode: 'no-cors', // POST ke GAS harus no-cors jika tanpa backend perantara
+            mode: 'no-cors',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ action: 'register', ...userData })
         });
@@ -17,7 +17,7 @@ async function registerToDB(userData) {
     }
 }
 
-// FUNGSI LOGIN (Menggunakan GET untuk response JSON yang stabil)
+// FUNGSI LOGIN (GET ke Google Sheets untuk response JSON yang stabil)
 async function loginFromDB(username, password) {
     try {
         const url = `${API_URL}?action=login_check&user=${encodeURIComponent(username)}&pass=${encodeURIComponent(password)}`;
