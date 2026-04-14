@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login | MAESTRO Aggregator</title>
     <link rel="stylesheet" href="style.css">
+    <script src="main.js"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
     <style>
         body {
@@ -89,24 +90,37 @@
             'asesi': { pass: '123', role: 'asesi', label: 'Asesi (Budi Santoso)' }
         };
 
-        document.getElementById('login-form').addEventListener('submit', (e) => {
+        document.getElementById('login-form').addEventListener('submit', async (e) => {
             e.preventDefault();
             const user = document.getElementById('username').value;
             const pass = document.getElementById('password').value;
+            const btn = e.target.querySelector('button');
             const error = document.getElementById('error-msg');
 
+            // 1. CEK DULU DI DATA LOKAL (UNTUK TIM INTERNAL)
             const userData = validUsers[user];
-
             if (userData && userData.pass === pass) {
-                // Set Session
                 localStorage.setItem('isLoggedIn', 'true');
                 localStorage.setItem('userRole', userData.role);
                 localStorage.setItem('roleLabel', userData.label);
                 localStorage.setItem('username', user);
-
                 window.location.href = userData.role === 'asesi' ? 'dashboard.html' : 'lsp-dashboard.html';
+                return;
+            }
+
+            // 2. JIKA TIDAK ADA, CEK KE DATABASE GOOGLE (UNTUK ASESI DAFTAR)
+            btn.innerText = 'Memverifikasi...';
+            const dbResult = await loginFromDB(user, pass);
+
+            if (dbResult && dbResult.status === 'success') {
+                localStorage.setItem('isLoggedIn', 'true');
+                localStorage.setItem('userRole', dbResult.role);
+                localStorage.setItem('roleLabel', dbResult.label);
+                localStorage.setItem('username', user);
+                window.location.href = dbResult.role === 'asesi' ? 'dashboard.html' : 'lsp-dashboard.html';
             } else {
                 error.style.display = 'block';
+                btn.innerText = 'Masuk Sekarang';
                 setTimeout(() => { error.style.display = 'none'; }, 3000);
             }
         });

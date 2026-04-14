@@ -73,6 +73,10 @@
                     <label>Nama Lengkap (Sesuai Ijazah)</label>
                     <input type="text" id="reg-name" placeholder="cth: Budi Santoso" required>
                 </div>
+                <div class="form-group full">
+                    <label>Nama Pengguna (Username untuk Login)</label>
+                    <input type="text" id="reg-username" placeholder="cth: budi_PM" required>
+                </div>
                 <div class="form-group">
                     <label>Nomor NIK (KTP)</label>
                     <input type="text" id="reg-nik" placeholder="16 Digit Angka" required>
@@ -126,7 +130,7 @@
             btn.disabled = true;
 
             const userData = {
-                username: document.getElementById('reg-email').value, // Menggunakan email sebagai username default
+                username: document.getElementById('reg-username').value,
                 password: pass,
                 name: name,
                 role: 'asesi',
