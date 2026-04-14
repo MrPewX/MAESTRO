@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daftar Asesi | MAESTRO Aggregator</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="main.js"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        body {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #f1f5f9;
+            padding: 20px;
+        }
+
+        .auth-card {
+            background: white;
+            padding: 40px;
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-lg);
+            width: 100%;
+            max-width: 500px;
+            border: 1px solid var(--border);
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .form-group { margin-bottom: 20px; }
+        .form-group.full { grid-column: span 2; }
+        
+        .form-group label { display: block; margin-bottom: 8px; font-weight: 600; font-size: 13px; color: #475569; }
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            outline: none;
+            transition: 0.2s;
+            font-size: 14px;
+        }
+
+        .form-group input:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(37,99,235,0.1); }
+        
+        .terms {
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-bottom: 24px;
+            display: flex;
+            gap: 8px;
+            align-items: flex-start;
+        }
+    </style>
+</head>
+<body>
+    <div class="auth-card">
+        <div style="text-align: center; margin-bottom: 32px;">
+            <div class="logo">Maestro<span>.</span></div>
+            <h2 style="margin-top: 10px;">Daftar Akun Asesi</h2>
+            <p style="color: var(--text-muted); font-size: 14px;">Lengkapi data diri untuk memulai sertifikasi.</p>
+        </div>
+
+        <form id="register-form">
+            <div class="form-grid">
+                <div class="form-group full">
+                    <label>Nama Lengkap (Sesuai Ijazah)</label>
+                    <input type="text" id="reg-name" placeholder="cth: Budi Santoso" required>
+                </div>
+                <div class="form-group">
+                    <label>Nomor NIK (KTP)</label>
+                    <input type="text" id="reg-nik" placeholder="16 Digit Angka" required>
+                </div>
+                <div class="form-group">
+                    <label>Nomor WhatsApp</label>
+                    <input type="tel" id="reg-phone" placeholder="0812..." required>
+                </div>
+                <div class="form-group full">
+                    <label>Email Aktif</label>
+                    <input type="email" id="reg-email" placeholder="nama@email.com" required>
+                </div>
+                <div class="form-group">
+                    <label>Kata Sandi</label>
+                    <input type="password" id="reg-pass" placeholder="••••••••" required>
+                </div>
+                <div class="form-group">
+                    <label>Konfirmasi Sandi</label>
+                    <input type="password" id="reg-confirm" placeholder="••••••••" required>
+                </div>
+            </div>
+
+            <div class="terms">
+                <input type="checkbox" required style="width: auto; margin-top: 3px;">
+                <span>Saya menyetujui Syarat & Ketentuan MAESTRO serta memberikan izin pengolahan data untuk keperluan uji kompetensi BNSP.</span>
+            </div>
+            
+            <button type="submit" class="btn btn-primary" style="width: 100%; padding: 14px;">Buat Akun Sekarang</button>
+        </form>
+
+        <div style="margin-top: 24px; text-align: center; font-size: 14px; color: var(--text-muted);">
+            Sudah punya akun? <a href="login.html" style="color: var(--primary); font-weight: 600; text-decoration: none;">Masuk di sini</a>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('register-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const name = document.getElementById('reg-name').value;
+            const pass = document.getElementById('reg-pass').value;
+            const confirm = document.getElementById('reg-confirm').value;
+
+            if (pass !== confirm) {
+                alert('Konfirmasi kata sandi tidak cocok!');
+                return;
+            }
+
+            const btn = e.target.querySelector('button');
+            const originalText = btn.innerText;
+            btn.innerText = 'Memproses...';
+            btn.disabled = true;
+
+            // Catat Pendaftaran ke Google Drive (Audit Trail)
+            await pushLog('New User Registration', `Asesi baru terdaftar: ${name}`);
+
+            setTimeout(() => {
+                alert('Pendaftaran Berhasil! Silakan masuk dengan akun Anda.');
+                window.location.href = 'login.html';
+            }, 1500);
+        });
+
+        lucide.createIcons();
+    </script>
+</body>
+</html>
