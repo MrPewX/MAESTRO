@@ -54,7 +54,7 @@
             <!-- 1. Halaman Status -->
             <section id="section-status" class="content-section active">
                 <h1>Progress Sertifikasi Saya</h1>
-                <p class="text-muted">Halo Budi, berikut adalah status sertifikasi Junior Web Developer Anda.</p>
+                <p class="text-muted">Halo <span id="welcome-name" style="font-weight:bold; color:var(--primary);">...</span>, berikut adalah status sertifikasi Anda.</p>
                 
                 <div class="progress-container">
                     <div class="progress-line"></div>
@@ -186,6 +186,16 @@
             window.location.href = 'login.html';
         }
 
+        // --- DASHBOARD INITIALIZATION ---
+        function initDashboard() {
+            const displayName = localStorage.getItem('roleLabel') || 'User MAESTRO';
+            const welcomeEl = document.getElementById('welcome-name');
+            if (welcomeEl) {
+                welcomeEl.innerText = displayName.split(' ')[0]; // Ambil nama depan
+            }
+        }
+
+        initDashboard();
         lucide.createIcons();
     </script>
 </body>
