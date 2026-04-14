@@ -1,10 +1,10 @@
 // MAESTRO GLOBAL API CONFIGURATION
 const API_URL = 'https://script.google.com/macros/s/AKfycbyLHwjBUAWRxO_eu8CIYy1gVJT791vZ9H6BhNlRckJBpn3FKc79zr1RndHr7CFHq7HrMw/exec';
 
-// FUNGSI PENDAFTARAN (Simpan ke Google Sheets)
+// FUNGSI PENDAFTARAN (POST ke Google Sheets)
 async function registerToDB(userData) {
     try {
-        const response = await fetch(API_URL, {
+        await fetch(API_URL, {
             method: 'POST',
             mode: 'no-cors',
             body: JSON.stringify({
@@ -12,6 +12,7 @@ async function registerToDB(userData) {
                 ...userData
             })
         });
+        // Karena no-cors tidak bisa baca response, kita asumsikan sukses jika fetch berhasil
         return { status: 'success' };
     } catch (error) {
         console.error('Registration Error:', error);
@@ -19,14 +20,13 @@ async function registerToDB(userData) {
     }
 }
 
-// FUNGSI LOGIN (Verifikasi ke Google Sheets)
-// Catatan: Karena Google Script CORS sering bermasalah dengan response balik di POST no-cors,
-// Kita akan menggunakan pendekatan GET untuk verifikasi yang lebih stabil jika diperlukan.
+// FUNGSI LOGIN (GET ke Google Sheets)
 async function loginFromDB(username, password) {
     try {
-        const url = `${API_URL}?action=login_check&user=${username}&pass=${password}`;
+        const url = `${API_URL}?action=login_check&user=${encodeURIComponent(username)}&pass=${encodeURIComponent(password)}`;
         const response = await fetch(url);
-        return await response.json();
+        const result = await response.json();
+        return result;
     } catch (error) {
         console.error('Login Error:', error);
         return { status: 'error' };
