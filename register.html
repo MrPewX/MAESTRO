@@ -122,17 +122,29 @@
             }
 
             const btn = e.target.querySelector('button');
-            const originalText = btn.innerText;
-            btn.innerText = 'Memproses...';
+            btn.innerText = 'Mendaftar...';
             btn.disabled = true;
 
-            // Catat Pendaftaran ke Google Drive (Audit Trail)
-            await pushLog('New User Registration', `Asesi baru terdaftar: ${name}`);
+            const userData = {
+                username: document.getElementById('reg-email').value, // Menggunakan email sebagai username default
+                password: pass,
+                name: name,
+                role: 'asesi',
+                email: document.getElementById('reg-email').value,
+                nik: document.getElementById('reg-nik').value,
+                phone: document.getElementById('reg-phone').value
+            };
 
-            setTimeout(() => {
-                alert('Pendaftaran Berhasil! Silakan masuk dengan akun Anda.');
+            const result = await registerToDB(userData);
+
+            if (result.status === 'success') {
+                alert('Pendaftaran Berhasil! Data Anda telah tersimpan di Database MAESTRO. Silakan Login.');
                 window.location.href = 'login.html';
-            }, 1500);
+            } else {
+                alert('Terjadi kesalahan saat menyimpan data. Coba lagi nanti.');
+                btn.innerText = 'Buat Akun Sekarang';
+                btn.disabled = false;
+            }
         });
 
         lucide.createIcons();
